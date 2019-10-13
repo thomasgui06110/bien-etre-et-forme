@@ -3,9 +3,31 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\InvoiceRepository")
+ * @ApiResource(
+ *  subresourceOperations={
+ *      "api_customers_invoices_get_subresource"={
+ *          "normalization_context"={"groups"={"invoices_subresource"}}
+ *      }
+ * },
+ *  attributes={
+ *      "pagination_enabled"=true,
+ *      "pagination_items_per_page"=20,
+ *      "order": {"amount": "desc"}
+ * },
+ *  normalizationContext={
+ *      "groups"={"invoices_read" }},
+ *  denormalizationContext={"disable_type_enforcement"=true}
+ * )
+ * @ApiFilter(OrderFilter::class)
  */
 class Invoice
 {
@@ -13,96 +35,121 @@ class Invoice
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})})
+     * @Assert\NotBlank(message="La date est obligatoire")
      */
     private $year;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})
+     * @Assert\Type(type="numeric", message="Le montant doit être un chiffre ")
      */
     private $amount;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})})
+     * @Assert\Type(type="numeric", message="Le montant doit être un chiffre ")
      */
     private $subscription;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", nullable=true)
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})})
      */
     private $medicalCertificate;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})})
+     * @Assert\NotBlank(message="Faire un choix ")
+     * @Assert\Choice(choices={"TOTAL", "PARTIEL"}, message="Faire un choix")
      */
     private $subscriptionType;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})})
+     * @Assert\Type(type="numeric", message="Le montant doit être un chiffre ")
      */
     private $january;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})})
      */
     private $february;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})})
      */
     private $march;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})})
      */
     private $april;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})})
      */
     private $may;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})})
      */
     private $july;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})})
      */
     private $june;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})})
      */
     private $august;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})})
      */
     private $september;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})})
      */
     private $october;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})})
      */
     private $november;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})})
      */
     private $december;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Customer", inversedBy="invoices")
+     * @Groups({"invoices_read"})
      */
     private $customer;
 
@@ -128,7 +175,7 @@ class Invoice
         return $this->amount;
     }
 
-    public function setAmount(?float $amount): self
+    public function setAmount($amount): self
     {
         $this->amount = $amount;
 

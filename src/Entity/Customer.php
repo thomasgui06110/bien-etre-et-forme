@@ -2,12 +2,29 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiFilter;
+use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CustomerRepository")
+ * @ApiResource(
+ *  subresourceOperations={
+ *      "invoices_get_subresource"={"path"="/customers/{id}/invoices"}
+ * },
+ *  normalizationContext={
+ *      "groups"={"customers_read"}
+ * }
+ * )
+ * @ApiFilter(SearchFilter::class)
+ * @ApiFilter(OrderFilter::class)
  */
 class Customer
 {
@@ -15,47 +32,101 @@ class Customer
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     *  @Groups({"customers_read", "invoices_read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="Le prénom du client est obligatoire")
+     * @Assert\Length(min=3, minMessage="Le nom doit faire entre 3 et 255 caractères.", max=255, maxMessage="Le nom doit faire entre 3 et 255 caractères.")
+     * @Groups({"customers_read", "invoices_read"})
      */
     private $firstName;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Le prénom du client est obligatoire")
+     * @Assert\Length(min=3, minMessage="Le nom doit faire entre 3 et 255 caractères.", max=255, maxMessage="Le nom doit faire entre 3 et 255 caractères.")
+     * @Groups({"customers_read", "invoices_read"})
      */
     private $lastName;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Email(message="L'adresse email n'est pas valide")
+     * @Groups({"customers_read", "invoices_read"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"customers_read", "invoices_read"})
      */
     private $phoneNumber;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"customers_read", "invoices_read"})
      */
     private $homePhone;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"customers_read", "invoices_read"})
      */
     private $comment;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Invoice", mappedBy="customer")
+     * @Groups({"customers_read"})
+     * @ApiSubresource
      */
     private $invoices;
 
     public function __construct()
     {
         $this->invoices = new ArrayCollection();
+    }
+
+    /**
+     * Permet de récupérer le total du en 2019
+     *  @Groups({"customers_read"})
+     * @return float
+     */
+    public function getTotalAmount(): float
+    {
+        return array_reduce($this->invoices->toArray(), function($total, $invoice) {
+            return $total + ($invoice->getYear() === "2019" ? 
+            ($invoice->getAmount() + $invoice->getSubscription() ): 0);
+        }, 0);
+       
+    }
+
+    /**
+     * Permet de récupérer le total payé en 2019
+     *  @Groups({"customers_read"})
+     * @return float
+     */
+    public function getTotalPaid(): float
+    {
+        return array_reduce($this->invoices->toArray(), function($total, $invoice) {
+            return $total + ($invoice->getYear() === "2019" ? (
+                $invoice->getJanuary()
+                + $invoice->getFebruary()
+                + $invoice->getMarch()
+                + $invoice->getApril()
+                + $invoice->getMay()
+                + $invoice->getJuly()
+                + $invoice->getJune()
+                + $invoice->getAugust()
+                + $invoice->getSeptember()
+                + $invoice->getOctober()
+                + $invoice->getNovember()
+                + $invoice->getDecember()
+            ) : 0);
+        }, 0);
+       
     }
 
     public function getId(): ?int
