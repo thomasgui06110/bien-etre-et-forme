@@ -1,0 +1,14 @@
+table,
+.table {
+  font-size: 0.830125rem;
+}
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1180px;
+  }
+}
+.table th, .table td {
+    padding: 0.6rem;
+    vertical-align: top;
+    border-top: 1px solid rgba(0,0,0,0.1);
+}

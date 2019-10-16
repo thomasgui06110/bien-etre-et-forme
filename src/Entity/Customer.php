@@ -21,9 +21,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  * },
  *  normalizationContext={
  *      "groups"={"customers_read"}
+ * },
+ *  attributes={
+ *      "order": {"lastName":"asc"}
  * }
  * )
- * @ApiFilter(SearchFilter::class)
+ * @ApiFilter(SearchFilter::class, properties={"invoices.year": "exact"})
  * @ApiFilter(OrderFilter::class)
  */
 class Customer
@@ -96,12 +99,13 @@ class Customer
      */
     public function getTotalAmount(): float
     {
-        return array_reduce($this->invoices->toArray(), function($total, $invoice) {
+        return $TotalAmount = array_reduce($this->invoices->toArray(), function($total, $invoice) {
             return $total + ($invoice->getYear() === "2019" ? 
             ($invoice->getAmount() + $invoice->getSubscription() ): 0);
         }, 0);
        
     }
+
 
     /**
      * Permet de récupérer le total payé en 2019
@@ -110,7 +114,8 @@ class Customer
      */
     public function getTotalPaid(): float
     {
-        return array_reduce($this->invoices->toArray(), function($total, $invoice) {
+        $TotalPaid = 0;
+        return $TotalPaid = array_reduce($this->invoices->toArray(), function($total, $invoice) {
             return $total + ($invoice->getYear() === "2019" ? (
                 $invoice->getJanuary()
                 + $invoice->getFebruary()
@@ -126,6 +131,35 @@ class Customer
                 + $invoice->getDecember()
             ) : 0);
         }, 0);
+       
+    }
+    /**
+     * Reste à payer
+     * @Groups({"customers_read"})
+     * @return float
+     */
+    public function getRest(): float
+    {
+        return - (array_reduce($this->invoices->toArray(), function($total, $invoice) {
+            return $total + ($invoice->getYear() === "2019" ? (
+                $invoice->getJanuary()
+                + $invoice->getFebruary()
+                + $invoice->getMarch()
+                + $invoice->getApril()
+                + $invoice->getMay()
+                + $invoice->getJuly()
+                + $invoice->getJune()
+                + $invoice->getAugust()
+                + $invoice->getSeptember()
+                + $invoice->getOctober()
+                + $invoice->getNovember()
+                + $invoice->getDecember()
+            ) : 0);
+        }, 0)) + (array_reduce($this->invoices->toArray(), function($total, $invoice) {
+            return $total + ($invoice->getYear() === "2019" ? 
+            ($invoice->getAmount() + $invoice->getSubscription() ): 0);
+        }, 0))
+        ;
        
     }
 

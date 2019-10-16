@@ -19,7 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      }
  * },
  *  attributes={
- *      "pagination_enabled"=true,
+ *      "pagination_enabled"=false,
  *      "pagination_items_per_page"=20,
  *      "order": {"amount": "desc"}
  * },
@@ -27,8 +27,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      "groups"={"invoices_read" }},
  *  denormalizationContext={"disable_type_enforcement"=true}
  * )
- * @ApiFilter(OrderFilter::class)
+ * @ApiFilter(OrderFilter::class, properties={"year","customer.lastName"}))
+ * @ApiFilter(SearchFilter::class)
  */
+
 class Invoice
 {
     /**
@@ -152,6 +154,8 @@ class Invoice
      * @Groups({"invoices_read"})
      */
     private $customer;
+
+    
 
     public function getId(): ?int
     {
