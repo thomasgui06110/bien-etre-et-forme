@@ -5,10 +5,11 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\InvoiceRepository")
@@ -18,6 +19,22 @@ use Symfony\Component\Validator\Constraints as Assert;
  *          "normalization_context"={"groups"={"invoices_subresource"}}
  *      }
  * },
+ *  collectionOperations={
+ *      "GET"={
+ *          "path"="/invoices"},
+ *      "POST",
+ *      "montant_par_adherent"={
+ *          "method"="GET",
+ *          "route_name"="montant_par_adherent",
+ *          "controller"="InvoicesController::class"
+ *  },
+ *       "NbAdherents"={
+ *          "method"="GET",
+ *          "route_name"="NbAdherents",
+ *          "controller"="InvoicesController::class"
+ *  }
+ * },
+ *  
  *  attributes={
  *      "pagination_enabled"=false,
  *      "pagination_items_per_page"=20,
@@ -33,6 +50,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class Invoice
 {
+
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -52,6 +71,7 @@ class Invoice
      * @ORM\Column(type="float", nullable=true)
      * @Groups({"invoices_read", "customers_read", "invoices_subresource"})
      * @Assert\Type(type="numeric", message="Le montant doit être un chiffre ")
+     * @Assert\NotBlank(message="Le montant est obligatoire")
      */
     private $amount;
 
@@ -71,8 +91,6 @@ class Invoice
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"invoices_read", "customers_read", "invoices_subresource"})})
-     * @Assert\NotBlank(message="Faire un choix ")
-     * @Assert\Choice(choices={"TOTAL", "PARTIEL"}, message="Faire un choix")
      */
     private $subscriptionType;
 
@@ -155,7 +173,34 @@ class Invoice
      */
     private $customer;
 
-    
+    private $invoices;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})})
+     */
+    private $insurance;
+
+    public function __construct()
+    {
+        $this->invoices = new ArrayCollection();
+    }
+
+    /**
+     * Permet de récupérer le total par an
+     * @Groups({"customers_read", "invoices_read"})
+     * @return float
+     */
+    // public function getTotalAmount(): float
+    // {
+    //     return $TotalAmount = array_reduce($this->invoices->toArray(), function($total, $invoice) {
+    //         return $total + ($invoice->getYear() === "2019" ? 
+    //         ($invoice->getAmount() + $invoice->getSubscription() ): 0);
+    //     }, 0);
+
+    // }
+
+
 
     public function getId(): ?int
     {
@@ -374,6 +419,18 @@ class Invoice
     public function setCustomer(?Customer $customer): self
     {
         $this->customer = $customer;
+
+        return $this;
+    }
+
+    public function getInsurance(): ?string
+    {
+        return $this->insurance;
+    }
+
+    public function setInsurance(?string $insurance): self
+    {
+        $this->insurance = $insurance;
 
         return $this;
     }

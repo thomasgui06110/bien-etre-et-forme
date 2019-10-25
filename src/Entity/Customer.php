@@ -41,15 +41,14 @@ class Customer
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\NotBlank(message="Le prénom du client est obligatoire")
-     * @Assert\Length(min=3, minMessage="Le nom doit faire entre 3 et 255 caractères.", max=255, maxMessage="Le nom doit faire entre 3 et 255 caractères.")
+     * @Assert\Length(min=3, minMessage="Le prénom doit faire entre 3 et 255 caractères.", max=255, maxMessage="Le nom doit faire entre 3 et 255 caractères.")
      * @Groups({"customers_read", "invoices_read"})
      */
     private $firstName;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="Le prénom du client est obligatoire")
+     * @Assert\NotBlank(message="Le nom de l'adhérent est obligatoire")
      * @Assert\Length(min=3, minMessage="Le nom doit faire entre 3 et 255 caractères.", max=255, maxMessage="Le nom doit faire entre 3 et 255 caractères.")
      * @Groups({"customers_read", "invoices_read"})
      */
@@ -87,14 +86,33 @@ class Customer
      */
     private $invoices;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"customers_read"})
+     */
+    private $adress;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"customers_read"})
+     */
+    private $postalCode;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"customers_read", "invoices_read"})
+     */
+    private $town;
+
     public function __construct()
     {
         $this->invoices = new ArrayCollection();
     }
 
+
     /**
      * Permet de récupérer le total du en 2019
-     *  @Groups({"customers_read"})
+     * @Groups({"customers_read", "invoices_read"})
      * @return float
      */
     public function getTotalAmount(): float
@@ -106,10 +124,9 @@ class Customer
        
     }
 
-
     /**
      * Permet de récupérer le total payé en 2019
-     *  @Groups({"customers_read"})
+     * @Groups({"customers_read", "invoices_read"})
      * @return float
      */
     public function getTotalPaid(): float
@@ -135,7 +152,7 @@ class Customer
     }
     /**
      * Reste à payer
-     * @Groups({"customers_read"})
+     * @Groups({"customers_read", "invoices_read"})
      * @return float
      */
     public function getRest(): float
@@ -267,6 +284,42 @@ class Customer
                 $invoice->setCustomer(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAdress(): ?string
+    {
+        return $this->adress;
+    }
+
+    public function setAdress(?string $adress): self
+    {
+        $this->adress = $adress;
+
+        return $this;
+    }
+
+    public function getPostalCode(): ?string
+    {
+        return $this->postalCode;
+    }
+
+    public function setPostalCode(?string $postalCode): self
+    {
+        $this->postalCode = $postalCode;
+
+        return $this;
+    }
+
+    public function getTown(): ?string
+    {
+        return $this->town;
+    }
+
+    public function setTown(?string $town): self
+    {
+        $this->town = $town;
 
         return $this;
     }

@@ -12,3 +12,20 @@ table,
     vertical-align: top;
     border-top: 1px solid rgba(0,0,0,0.1);
 }
+h1 {
+  margin-bottom: 0.4em;
+}
+h2{
+  font-size: 1em;
+  padding: 1em 0;
+}
+label{
+  text-align: center;
+}
+
+
+i.wi {
+  font-size: 5em;
+  text-align: center;
+  line-height: 1.3em;
+}

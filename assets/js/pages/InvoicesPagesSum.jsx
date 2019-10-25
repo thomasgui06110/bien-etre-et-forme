@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from "react";
 import Pagination from "../components/Pagination";
-import axios from "axios";
 import { Link } from "react-router-dom";
 import invoicesAPI from "../services/invoicesAPI";
 import { toast } from "react-toastify";
 import TableLoader from "../components/loaders/TableLoader";
 
 const TYPE_CLASSES = {
-  TOTAL: "success",
+  TOTAL: "light",
   PARTIEL: "info",
-  COMPLET: "success"
+  COMPLET: "light"
 };
 const CERTIF_CLASSES = {
-  true: "success",
+  true: "light",
   false: "danger"
 };
 
@@ -21,7 +20,12 @@ const CERTIF_LABELS = {
   false: "Non"
 };
 
-const InvoicesPage = props => {
+const INVOICE_CLASSE = {
+  OUI: "light",
+  NON: "danger"
+};
+
+const InvoicesPagesSum = props => {
   const [invoices, setInvoices] = useState([]);
   const [total, setTotal] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -31,13 +35,16 @@ const InvoicesPage = props => {
 
   const fetchInvoices = async () => {
     try {
-      const data = await invoicesAPI.findAll();
+      const data = await invoicesAPI.findAllSum();
       setInvoices(data);
+
       setLoading(false);
     } catch (error) {
       console.log(error.response);
     }
   };
+
+  const d = new Date().getUTCFullYear();
 
   useEffect(() => {
     fetchInvoices();
@@ -66,10 +73,9 @@ const InvoicesPage = props => {
     setCurrentPage(1);
   };
 
-
   const handleDelete = async id => {
     const originalInvoices = [...invoices];
-    setInvoices(invoices.filter(invoice => invoice.id !== id));
+    setInvoices(invoices.filter(invoice => invoice.iId !== id));
 
     try {
       await invoicesAPI.delete(id);
@@ -84,17 +90,18 @@ const InvoicesPage = props => {
   // Gestion de la recherche
   const filteredInvoices = invoices.filter(
     c =>
-      c.customer.firstName.toLowerCase().includes(search.toLowerCase()) ||
-      c.customer.lastName.toLowerCase().includes(search.toLowerCase()) ||
-      c.year.toString().startsWith(search.toString()) ||
-      CERTIF_LABELS[c.medicalCertificate].toLowerCase() === search.toLowerCase()
+      c.firstName.toLowerCase().includes(search.toLowerCase()) ||
+      c.lastName.toLowerCase().includes(search.toLowerCase()) ||
+      c.Annee.toString() === search.toString() ||
+      CERTIF_LABELS[c.medicalCertificate].toLowerCase() ===
+        search.toLowerCase() ||
+      c.insurance.toUpperCase() === search.toUpperCase()
     //c.amount.toLowerCase().startsWith(search.toLowerCase())
   );
-  
+
   const tot = filteredInvoices => {
-    setTotal(invoice.year)
-  }
-   
+    setTotal(invoice.year);
+  };
 
   // Pagination
   const paginatedInvoices = Pagination.getData(
@@ -113,46 +120,6 @@ const InvoicesPage = props => {
         </Link>
       </div>
       <div className="jumbotron p-3">
-        {/* <button
-          id="nonSolde2018"
-          onClick={() => nonSolde2018()}
-          className="btn btn-sm btn-primary"
-        >
-          Pas d'assurance
-        </button>
-        <button
-          id="notCertif"
-          onClick={() => notCertif()}
-          className="btn btn-sm btn-primary ml-1"
-        >
-          Pas de certif. médic.
-        </button>
-        <button
-          id="nonSolde2018"
-          onClick={() => nonSolde2019()}
-          className="btn btn-sm btn-primary ml-1"
-        >
-          Complète
-        </button>
-        <button
-          id="Solde"
-          onClick={() => Solde2019()}
-          className="btn btn-sm btn-primary ml-1"
-        >
-          Partiel
-        </button>
-        <button
-          className="btn btn-sm btn-primary ml-1"
-          onClick={() => all2018()}
-        >
-          Tous les adhérents 2018
-        </button>
-        <button
-          className="btn btn-sm btn-primary ml-1"
-          onClick={() => all2019()}
-        >
-          Tous les adhérents 2019
-        </button> */}
         <div className="row">
           <p className="col-sm">
             <input
@@ -163,28 +130,19 @@ const InvoicesPage = props => {
               placeholder="Rechercher un nom, une propriété ou une année..."
             />
           </p>
-          {/*  <p className="col-sm">
-            <input
-              type="text"
-              onChange={handelSearchYear}
-              value={searchYear}
-              className="form-control mt-2"
-              placeholder="Rechercher une année..."
-            /> 
-          </p>*/}
         </div>
       </div>
 
-      <table className="table table-hover">
-        <thead>
+      <table className="table table-striped">
+        <thead className="thead-dark">
           <tr>
             <th>Adhérent</th>
             <th>Tél</th>
             <th>Mail</th>
             <th>Année</th>
+            <th className="text-center">Doit</th>
             <th className="text-center">Tot. Réglé</th>
-            <th className="text-center">Reste</th>
-            {/* <th className="text-center">Reste du</th> */}
+            <th className="text-center">Reste du</th>
 
             <th className="text-center">Certif</th>
             <th className="text-center">Assurance</th>
@@ -196,30 +154,42 @@ const InvoicesPage = props => {
         {!loading && (
           <tbody>
             {paginatedInvoices.map(invoice => (
-              <tr key={invoice.id}>
+              <tr key={invoice.iId}>
                 <td>
-                  <Link to={"/customers/" + invoice.customer.id}>
-                    {invoice.customer.firstName} {invoice.customer.lastName}
+                  <Link to={"/customers/" + invoice.id}>
+                    {invoice.firstName} {invoice.lastName}
                   </Link>
                 </td>
-                <td>
-                 {invoice.customer.phoneNumber}
-                </td>
-                <td>
-                 {invoice.customer.email}
-                </td>
+                <td>{invoice.phoneNumber}</td>
+                <td>{invoice.email}</td>
 
                 <td>
-                  <span className="badge badge-light">{invoice.year}</span>
+                  <span
+                    className={
+                      "badge badge-" +
+                      ((d == invoice.Annee && "success") || "light")
+                    }
+                  >
+                    {invoice.Annee}
+                  </span>
                 </td>
+                <td className="text-center">{invoice.Doit} €</td>
+                <td className="text-center">{invoice.Regle} €</td>
+
                 <td className="text-center">
-                  {(invoice.january + invoice.february + invoice.march + invoice.april + + invoice.may + invoice.june).toLocaleString()} €
+                  <span
+                    className={
+                      "badge badge-" +
+                      ((invoice.Doit - invoice.Regle == 0 && "success") ||
+                        "danger")
+                    }
+                  >
+                    {invoice.Doit - invoice.Regle} €
+                  </span>
                 </td>
-                <td className="text-center"> €</td>
-
-                {/* <td className="text-center">{invoice.customer.rest} €</td> */}
 
                 <td className="text-center">
+                  {" "}
                   <span
                     className={
                       "badge badge-" +
@@ -230,10 +200,15 @@ const InvoicesPage = props => {
                   </span>
                 </td>
                 <td className="text-center">
-                  <span className={"badge badge-light"}>Non</span>
+                  <span
+                    className={
+                      "badge badge-" + INVOICE_CLASSE[invoice.insurance]
+                    }
+                  >
+                    {invoice.insurance}
+                  </span>
                 </td>
                 <td className="text-center">
-                  {" "}
                   <span
                     className={
                       "badge badge-" + TYPE_CLASSES[invoice.subscriptionType]
@@ -244,13 +219,13 @@ const InvoicesPage = props => {
                 </td>
                 <td>
                   <Link
-                    to={"/invoices/" + invoice.id}
+                    to={"/invoices/" + invoice.iId}
                     className="btn btn-sm btn-primary mr-1"
                   >
                     Modifier
                   </Link>
                   <button
-                    onClick={() => handleDelete(invoice.id)}
+                    onClick={() => handleDelete(invoice.iId)}
                     className="btn btn-sm btn-danger"
                   >
                     Suppr
@@ -272,4 +247,4 @@ const InvoicesPage = props => {
   );
 };
 
-export default InvoicesPage;
+export default InvoicesPagesSum;

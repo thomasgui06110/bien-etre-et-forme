@@ -1,24 +1,28 @@
 import React, { useEffect, useState } from "react";
 import Pagination from "../components/Pagination";
 import CustomersAPI from "../services/customersAPI";
-import { async } from "q";
+import { Link } from "react-router-dom";
+import TableLoader from "../components/loaders/TableLoader";
 
 const CustomersPage = props => {
   const [customers, setCustomers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
- 
+  const [loading, setLoading] = useState(true);
+
   // Permet d'aller récupérer les customers
   const fetchCustomers = async () => {
     try {
       const data = await CustomersAPI.findAll();
       setCustomers(data);
-    } catch(error) {
-      console.log(error.response)
+      // console.log(customers);
+      setLoading(false);
+    } catch (error) {
+      console.log(error.response);
     }
-  }
+  };
 
-// Au chargement du composant, on va chercher les customers
+  // Au chargement du composant, on va chercher les customers
   useEffect(() => {
     fetchCustomers();
   }, []);
@@ -26,12 +30,10 @@ const CustomersPage = props => {
   // Filtre Payées ou pas
   const all2018 = async () => {
     try {
-     await  CustomersAPI.All2018()
-        .then(data => setCustomers(data))
+      await CustomersAPI.All2018().then(data => setCustomers(data));
+    } catch (error) {
+      console.log(error.response);
     }
-      catch(error) {
-        console.log(error.response)
-      };
   };
   const all2019 = () => {
     CustomersAPI.All2019()
@@ -55,7 +57,7 @@ const CustomersPage = props => {
       .then(data => setCustomers(data.filter(customer => customer.rest !== 0)))
       .catch(error => console.log(error.response));
   };
- 
+
   const Solde2019 = () => {
     CustomersAPI.All2019()
       .then(data => setCustomers(data.filter(customer => customer.rest === 0)))
@@ -73,29 +75,28 @@ const CustomersPage = props => {
 
     // 2. Approche pessimiste
     try {
-      await CustomersAPI.delete(id)
-    } catch(error) {
+      await CustomersAPI.delete(id);
+    } catch (error) {
       setCustomers(originalCustomers);
       console.log(error.response);
     }
-    
   };
 
   const handelPageChange = page => {
     setCurrentPage(page);
   };
 
-  const handelSearch = ({currentTarget}) => {
+  const handelSearch = ({ currentTarget }) => {
     setSearch(currentTarget.value);
     setCurrentPage(1);
   };
 
-  const itemsPerPage = 10;
-
+  const itemsPerPage = 30;
   const filteredCustomers = customers.filter(
     c =>
       c.firstName.toLowerCase().includes(search.toLowerCase()) ||
-      c.lastName.toLowerCase().includes(search.toLowerCase())
+      c.lastName.toLowerCase().includes(search.toLowerCase()) ||
+      c.town.toLowerCase().includes(search.toLowerCase())
   );
 
   // d'ou on part pendant combien
@@ -108,107 +109,71 @@ const CustomersPage = props => {
 
   return (
     <>
-      <h1>Liste des Adhérents</h1>
+      <div className="mb-2 d-flex justify-content-between align-items-center">
+        <h1>Liste des Adhérents</h1>
+        <Link to="/customers/new" className="btn btn-primary">
+          Créer un adhérent
+        </Link>
+      </div>
       <div className="jumbotron p-3">
-        <button
-          id="nonSolde2018"
-          onClick={() => nonSolde2018()}
-          className="btn btn-sm btn-primary"
-        >
-          Non soldés 2018
-        </button>
-        <button
-          id="Solde"
-          onClick={() => Solde2018()}
-          className="btn btn-sm btn-primary ml-1"
-        >
-          Soldés 2018
-        </button>
-        <button
-          id="nonSolde2018"
-          onClick={() => nonSolde2019()}
-          className="btn btn-sm btn-primary ml-1"
-        >
-          Non soldés 2019
-        </button>
-        <button
-          id="Solde"
-          onClick={() => Solde2019()}
-          className="btn btn-sm btn-primary ml-1"
-        >
-          Soldés 2019
-        </button>
-        <button
-          className="btn btn-sm btn-primary ml-1"
-          onClick={() => all2018()}
-        >
-          Tous les adhérents 2018
-        </button>
-        <button
-          className="btn btn-sm btn-primary ml-1"
-          onClick={() => all2019()}
-        >
-          Tous les adhérents 2019
-        </button>
         <input
           type="text"
           onChange={handelSearch}
           value={search}
           className="form-control mt-2"
-          placeholder="Rechercher un nom..."
+          placeholder="Rechercher un nom, une ville..."
         />
       </div>
       <table className="table table-hover">
-        <thead>
+        <thead className="thead-dark">
           <tr>
             <th>ID.</th>
             <th>Adhérent(e)</th>
             <th>Email</th>
             <th>Tél</th>
-            <th className="text-center">Doit</th>
-            <th className="text-center">Réglé 2019</th>
-            <th className="text-center">Reste 2019</th>
+            <th className="text-center">Adresse</th>
+            <th className="text-center">CP - Ville</th>
+            <th className="text-center">?</th>
+
             <th></th>
           </tr>
         </thead>
-        <tbody>
-          {paginatedCustomers.map(customer => (
-            <tr key={customer.id}>
-              <td>{customer.id}</td>
-              <td>
-                <a href="#">
-                  {customer.firstName} {customer.lastName}
-                </a>
-              </td>
-              <td>{customer.email}</td>
-              <td>{customer.phoneNumber}</td>
-              <td className="text-center">
-                <span className="badge badge-light">
-                  {customer.totalAmount.toLocaleString()} €
-                </span>
-              </td>
-              <td className="text-center">
-                {customer.totalPaid.toLocaleString()} €
-              </td>
-              <td className="text-center">
-                <span className="btn btn-sm btn-outline-danger">
-                  {customer.rest.toLocaleString()} €
-                </span>
-              </td>
-              <td>
-                <button
-                  onClick={() => handleDelete(customer.id)}
-                  disabled={customer.invoices.length > 0}
-                  className="btn btn-sm btn-danger"
-                >
-                  Supprimer
-                </button>
-              </td>
-              <td></td>
-            </tr>
-          ))}
-        </tbody>
+        {!loading && (
+          <tbody>
+            {paginatedCustomers.map(customer => (
+              <tr key={customer.id}>
+                <td>{customer.id}</td>
+                <td>
+                  <Link to={"/customers/" + customer.id}>
+                    {customer.firstName} {customer.lastName}
+                  </Link>
+                </td>
+                <td>{customer.email}</td>
+                <td>{customer.phoneNumber}</td>
+                <td className="text-center">{customer.adress}</td>
+
+                <td className="text-center">
+                  {customer.postalCode} {customer.town}
+                </td>
+                <td className="text-center">
+                  <span className="btn btn-sm btn-outline-light"></span>
+                </td>
+                <td>
+                  <button
+                    onClick={() => handleDelete(customer.id)}
+                    disabled={customer.invoices.length > 0}
+                    className="btn btn-sm btn-danger"
+                  >
+                    Supprimer
+                  </button>
+                </td>
+                <td></td>
+              </tr>
+            ))}
+          </tbody>
+        )}
       </table>
+      {loading && <TableLoader />}
       {itemsPerPage < filteredCustomers.length && (
         <Pagination
           currentPage={currentPage}
