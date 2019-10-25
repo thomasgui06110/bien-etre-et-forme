@@ -10,6 +10,7 @@ import CustomerPage from "./pages/CustomerPage";
 import InvoicesPage from "./pages/InvoicesPage";
 import InvoicesPagesSum from "./pages/InvoicesPagesSum";
 import InvoicePage from "./pages/InvoicePage";
+import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
 import Stats from "./pages/Stats";
 import AuthAPI from "./services/authAPI";
@@ -49,6 +50,11 @@ const App = () => {
               render={props => (
                 <LoginPage onLogin={setIsAuthenticated} {...props} />
               )}
+            />
+              <Route
+              path="/register"
+              isAuthenticated={isAuthenticated}
+              component={RegisterPage}
             />
             <PrivateRoute
               path="/invoices/sum"
