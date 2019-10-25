@@ -33,7 +33,7 @@ const RegisterPage = props => {
        // "http://localhost:8000/api/users",
         user
       );
-      console.log(response);
+     
     } catch (error) {
       console.log(error.response);
     }
