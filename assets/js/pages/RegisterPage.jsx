@@ -4,14 +4,14 @@ import axios from "axios";
 
 const RegisterPage = props => {
   const [user, setUser] = useState({
-    firsName: "",
+    firstName: "",
     lastName: "",
     email: "",
     password: ""
   });
 
   const [errors, setErrors] = useState({
-    firsName: "",
+    firstName: "",
     lastName: "",
     email: "",
     password: ""
@@ -48,14 +48,14 @@ const RegisterPage = props => {
         <Field
           name="lastName"
           label="Nom"
-          error={errors.firstName}
+          error={errors.lastName}
           placeholder="Nom"
           value={user.lastName}
           onChange={handelChange}
         />
         <Field
           name="email"
-          error={errors.firstName}
+          error={errors.email}
           label="email"
           placeholder="mail"
           value={user.email}
@@ -64,7 +64,7 @@ const RegisterPage = props => {
         <Field
           name="password"
           label="passowrd"
-          error={errors.firstName}
+          error={errors.password}
           type="password"
           placeholder="mot de passe"
           value={user.password}
