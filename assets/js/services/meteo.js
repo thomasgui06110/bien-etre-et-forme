@@ -10,7 +10,7 @@ function ip() {
 
 function ville() {
     return fetch(
-        "http://api.ipstack.com/" +
+        "https://api.ipstack.com/" +
           ip +
           "?access_key=af40be1d35baa28b63864eb0cbc6e03a"
       )
@@ -20,5 +20,6 @@ function ville() {
 
 export default {
     ip,
-    capitalize
+    capitalize,
+    ville
 }

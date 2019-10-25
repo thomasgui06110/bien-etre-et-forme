@@ -164,6 +164,7 @@ const InvoicePage = ({ history, match }) => {
           apiErrors[propertyPath] = message;
         });
         setErrors(apiErrors);
+        toast.error("La facture n'a pas étée sauvegardée 😈");
         // TODO : notification des erreurs
       }
     }
