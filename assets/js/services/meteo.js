@@ -1,7 +1,6 @@
 function capitalize(str) {
     return str[0].toUpperCase() + str.slice(1);
 }
-
 function ip() {
     return fetch("https://api.ipify.org?format=json")
     .then(resultat => resultat.json())
