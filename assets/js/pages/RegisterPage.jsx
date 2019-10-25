@@ -42,7 +42,7 @@ const RegisterPage = props => {
           label="Prenom"
           error={errors.firstName}
           placeholder="Prénom"
-          value={user.fistName}
+          value={user.firstName}
           onChange={handelChange}
         />
         <Field
