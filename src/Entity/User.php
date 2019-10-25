@@ -35,7 +35,7 @@ class User implements UserInterface
     private $email;
 
     /**
-     * @ORM\Column(type="json")
+     * @ORM\Column(type="json", nullable=true)
      */
     private $roles = [];
 
@@ -47,16 +47,13 @@ class User implements UserInterface
     private $password;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"customer_read", "users_read"})
-     * @Assert\NotBlank(message="Le prénom est obligatoire")
-     * @Assert\Length(min=3, minMessage="Le prenom doit faire entre 3 et 255 caractères.", max=255, maxMessage="Le prénom doit faire entre 3 et 255 caractères.")
      */
     private $firstName;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\NotBlank(message="Le nom est obligatoire")
      * @Groups({"customer_read", "users_read"})
      * @Assert\Length(min=3, minMessage="Le nom doit faire entre 3 et 255 caractères.", max=255, maxMessage="Le nom doit faire entre 3 et 255 caractères.")
      */
