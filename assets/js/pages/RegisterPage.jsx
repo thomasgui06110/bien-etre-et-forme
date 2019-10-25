@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Field from "../components/forms/Fields";
 import axios from "axios";
+import { USERS_API} from "../config";
 
 const RegisterPage = props => {
   const [user, setUser] = useState({
