@@ -4,14 +4,14 @@ function ip() {
     .then(json => json.ip);
 }
 
- //function ville() {
-   //  return fetch(
-     //    "https://ipapi.co/" + ip + "/json"
+ function ville(ip) {
+     return fetch(
+       `https://ipapi.co/${ip}/json`
         
-//     )
-//     .then(resultat => resultat.json())
-//     .then(json => json.city);
-// }
+   )
+     .then(resultat => resultat.json())
+    .then(json => json.city);
+ }
 
 
 function meteo(ville) {
@@ -24,5 +24,6 @@ function meteo(ville) {
 
 export default {
     ip,
+    ville,
     meteo
 }

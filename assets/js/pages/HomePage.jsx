@@ -20,9 +20,9 @@ const HomePage = props => {
     // 1. Choper IP du PC qui ouvre la 📄
     const ip = await meteoAPI.ip();
 
-    //const ville = await meteoAPI.ville(ip);
-    const ville = "Grasse"
-    console.log(ville)
+    const ville = await meteoAPI.ville(ip);
+    const villes = "Grasse"
+    console.log(villes)
     const meteo = await meteoAPI.meteo(ville);
     displayWeatherInfos(meteo);
   }
