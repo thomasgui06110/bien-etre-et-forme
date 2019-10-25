@@ -26,7 +26,10 @@ const RegisterPage = props => {
     event.preventDefault();
 
     try {
-      const response = await axios.post("'https://bienetreforme.heroku.com/api/users'", user);
+      const response = await axios.post(
+        "https://bienetreforme.heroku.com/api/users",
+        user
+      );
       console.log(response);
     } catch (error) {
       console.log(error.response);
