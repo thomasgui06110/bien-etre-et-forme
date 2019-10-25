@@ -27,8 +27,8 @@ const RegisterPage = props => {
 
     try {
       const response = await axios.post(
-        "https://bienetreforme.heroku.com/api/users",
-        //USERS_API,
+        //"https://bienetreforme.heroku.com/api/users",
+        USERS_API,
        // "http://localhost:8000/api/users",
         user
       );
