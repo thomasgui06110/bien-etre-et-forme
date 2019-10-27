@@ -19,6 +19,14 @@ use Symfony\Component\Validator\Constraints as Assert;
  *  subresourceOperations={
  *      "invoices_get_subresource"={"path"="/customers/{id}/invoices"}
  * },
+ * 
+ *  collectionOperations={
+ *      "get_customers"={
+ *          "method"="GET",
+ *          "access_control"="is_granted('ROLE_USER')",
+ *          "access_control_message"="Vous n'avez pas le droit !"
+ * }
+ * },
  *  normalizationContext={
  *      "groups"={"customers_read"}
  * },

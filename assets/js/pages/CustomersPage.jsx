@@ -3,13 +3,14 @@ import Pagination from "../components/Pagination";
 import CustomersAPI from "../services/customersAPI";
 import { Link } from "react-router-dom";
 import TableLoader from "../components/loaders/TableLoader";
+import jwtDecode from "jwt-decode";
 
 const CustomersPage = props => {
   const [customers, setCustomers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
-
+  const [role, setRole] = useState([]);
   // Permet d'aller récupérer les customers
   const fetchCustomers = async () => {
     try {
@@ -107,13 +108,35 @@ const CustomersPage = props => {
     itemsPerPage
   );
 
+  function roleUser() {
+    const token = window.localStorage.getItem("authToken");
+
+    if (token) {
+      const { exp: expiration } = jwtDecode(token);
+
+      if (expiration * 1000 > new Date().getTime()) {
+        const { roles: roles } = jwtDecode(token);
+       
+        setRole("");
+        setRole(roles);
+      }
+    } else {
+      console.log("plus de token")
+    }
+  }
+  useEffect(() => {
+    roleUser();
+  }, []);
+ 
   return (
     <>
       <div className="mb-2 d-flex justify-content-between align-items-center">
-        <h1>Liste des Adhérents</h1>
-        <Link to="/customers/new" className="btn btn-primary">
-          Créer un adhérent
-        </Link>
+        <h1>Liste des Adhérents</h1> 
+        {(role != "ROLE_USER") && (
+          <Link to="/customers/new" className="btn btn-primary">
+            Créer un adhérent
+          </Link>
+        )}
       </div>
       <div className="jumbotron p-3">
         <input

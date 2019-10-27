@@ -3,6 +3,7 @@ import Field from "../components/forms/Fields";
 import { Link } from "react-router-dom";
 import CustomersAPI from "../services/customersAPI";
 import { toast } from "react-toastify";
+import jwtDecode from "jwt-decode";
 
 const CustomerPage = ({ match, history }) => {
   const { id = "new" } = match.params;

@@ -42,7 +42,7 @@ class InvoiceRepository extends ServiceEntityRepository
     {
         $query = $this->createQueryBuilder('i')
             ->select('i.year as Annee, i.id as iId, c.lastName, c.firstName, c.email, c.phoneNumber, i.medicalCertificate, i.subscriptionType,
-            i.amount, i.subscription, (i.amount + i.subscription) as Doit, i.insurance,
+            i.amount, i.subscription, (i.amount + i.subscription) as Doit, i.insurance, c.id,
             (i.january + i.february + i.march + i.april + i.may + i.june + i.july + i.august + i.september + i.october + i.november + i.december) as Regle')
             ->join('i.customer', 'c')
             ->orderBy('Annee', 'DESC');

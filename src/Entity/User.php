@@ -4,20 +4,25 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @ApiResource(
- *  normalizationContext={"groups"={"users_read"}}
+ *  normalizationContext={"groups"={"users_read", "invoices_read", "customers_read"}}
  * )
  * @UniqueEntity("email", message="Un utilisateur ayant cette adresse mail existe déjà")
  */
+
 class User implements UserInterface
 {
+    const ROLE_ADMIN = 'ROLE_ADMIN';
+    const ROLE_USER = 'ROLE_USER';
+    const DEFAULT_ROLE = 'ROLE_USER';
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -30,12 +35,13 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=180, unique=true)
      * @Assert\NotBlank(message="Le mail est obligatoire")
      * @Assert\Email(message="Le mail n'est pas valide")
-     * @Groups({"customer_read", "users_read"})
+     * @Groups({"customer_read", "users_read", "invoices_read"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="json", nullable=true)
+     * @Groups({"customer_read", "users_read", "invoices_read"})
      */
     private $roles = [];
 
@@ -48,16 +54,21 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"customer_read", "users_read"})
+     * @Groups({"customer_read", "users_read", "invoices_read"})
      */
     private $firstName;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"customer_read", "users_read"})
+     * @Groups({"customer_read", "users_read", "invoices_read"})
      * @Assert\Length(min=3, minMessage="Le nom doit faire entre 3 et 255 caractères.", max=255, maxMessage="Le nom doit faire entre 3 et 255 caractères.")
      */
     private $lastName;
+
+    public function __construct()
+    {
+        $this-> users =new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -98,6 +109,12 @@ class User implements UserInterface
         return array_unique($roles);
     }
 
+    /**
+     * Affecte les roles
+     *
+     * @param array $roles
+     * @return self
+     */
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;

@@ -26,7 +26,9 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  *      "montant_par_adherent"={
  *          "method"="GET",
  *          "route_name"="montant_par_adherent",
- *          "controller"="InvoicesController::class"
+ *          "controller"="InvoicesController::class",
+ *          "access_control"="is_granted('ROLE_ADMIN')",
+ *          "access_control_message"="Vous n'avez pas le droit !"
  *  },
  *       "NbAdherents"={
  *          "method"="GET",

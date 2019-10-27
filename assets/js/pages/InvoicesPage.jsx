@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Pagination from "../components/Pagination";
-import axios from "axios";
 import { Link } from "react-router-dom";
 import invoicesAPI from "../services/invoicesAPI";
 import { toast } from "react-toastify";
@@ -27,7 +26,7 @@ const InvoicesPage = props => {
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
-  //const [searchYear, setSearchYear] = useState("");
+  //const [searchYear, setSearchYear] = useState([""]);
 
   const fetchInvoices = async () => {
     try {
@@ -198,7 +197,7 @@ const InvoicesPage = props => {
             {paginatedInvoices.map(invoice => (
               <tr key={invoice.id}>
                 <td>
-                  <Link to={"/customers/" + invoice.customer.id}>
+                  <Link to={"/customers/" + invoice.id}>
                     {invoice.customer.firstName} {invoice.customer.lastName}
                   </Link>
                 </td>

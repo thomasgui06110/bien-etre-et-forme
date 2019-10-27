@@ -21,8 +21,8 @@ const HomePage = props => {
     const ip = await meteoAPI.ip();
 
     const ville = await meteoAPI.ville(ip);
-    const villes = "Grasse"
-    console.log(villes)
+    
+    
     const meteo = await meteoAPI.meteo(ville);
     displayWeatherInfos(meteo);
   }

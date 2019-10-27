@@ -44,6 +44,7 @@ const InvoicesPagesSum = props => {
     }
   };
 
+
   const d = new Date().getUTCFullYear();
 
   useEffect(() => {

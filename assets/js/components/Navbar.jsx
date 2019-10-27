@@ -1,18 +1,40 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import AuthAPI from "../services/authAPI";
 import { NavLink } from "react-router-dom";
 import AuthContext from "../contexts/AuthContext";
 import { toast } from "react-toastify";
 
-const Navbar = ({ history }) => {
+import jwtDecode from "jwt-decode";
 
-  const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext)
+const Navbar = ({ history }) => {
+  const [name, setName] = useState("");
+
+  const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
   const handelLogout = () => {
     AuthAPI.logout();
+
     setIsAuthenticated(false);
     toast.info("Vous êtes déconnecté 😁");
-    history.push("/login")
+    history.push("/login");
   };
+
+  function nameUser() {
+    const token = window.localStorage.getItem("authToken");
+
+    if (token) {
+      const { exp: expiration } = jwtDecode(token);
+
+      if (expiration * 1000 > new Date().getTime()) {
+        const { firstName: Names } = jwtDecode(token);
+
+        setName(Names);
+      }
+    }
+  }
+  useEffect(() => {
+    nameUser();
+  }, []);
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
       <NavLink className="navbar-brand" to="/">
@@ -32,7 +54,7 @@ const Navbar = ({ history }) => {
 
       <div className="collapse navbar-collapse" id="navbarColor02">
         <ul className="navbar-nav mr-auto">
-          <li  className="nav-item">
+          <li className="nav-item">
             <NavLink className="nav-link" to="/customers">
               Adhérents <span className="sr-only">(current)</span>
             </NavLink>
@@ -47,6 +69,7 @@ const Navbar = ({ history }) => {
               Statistiques
             </NavLink>
           </li>
+        
         </ul>
         <ul className="navbar-nav ml-auto">
           {(!isAuthenticated && (
@@ -63,11 +86,16 @@ const Navbar = ({ history }) => {
               </li>
             </>
           )) || (
-            <li className="nav-item">
-              <button onClick={handelLogout} className="btn btn-danger">
-                Deconnexion
-              </button>
-            </li>
+            <>
+              <li className="nav-item">
+                <button onClick={handelLogout} className="btn btn-danger">
+                  Deconnexion
+                </button>
+              </li>
+              <li className="Nav-item">
+                <span className="nav-link ">Bonjour {name} 🍹</span>
+              </li>
+            </>
           )}
         </ul>
       </div>

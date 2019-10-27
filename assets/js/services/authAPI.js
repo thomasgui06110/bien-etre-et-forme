@@ -6,7 +6,7 @@ function logout() {
   window.localStorage.removeItem("authToken");
   delete axios.defaults.headers["Authorization"];
 }
-
+const [Names] = ""
 function authenticate(credentials) {
   return axios
     .post(LOGIN_API, credentials)
@@ -17,19 +17,37 @@ function authenticate(credentials) {
 
       //On previent axios que l'on a un header par defaut
       setAxiosToken(token);
+     
     });
 }
+function nameUser() {
+  const token = window.localStorage.getItem("authToken");
 
+
+  if (token) {
+    const { exp: expiration } = jwtDecode(token);
+    
+    if (expiration * 1000 > new Date().getTime()) {
+     const {firstName: Names} = jwtDecode(token);
+     console.log(Names)
+    } else {
+      console.log("HELLO TROP TARD ");
+      
+    }
+  }
+}
+console.log(Names)
 function setAxiosToken(token) {
   axios.defaults.headers["Authorization"] = "Bearer " + token;
 }
 function setup() {
   // 1. Voir si on a token
   const token = window.localStorage.getItem("authToken");
-
+ 
   // 2. si le token est encore valide
   if (token) {
     const { exp: expiration } = jwtDecode(token);
+    
     if (expiration * 1000 > new Date().getTime()) {
       setAxiosToken(token);
     } else {
@@ -42,6 +60,7 @@ function setup() {
 function isAuthenticated() {
   // 1. Voir si on a token
   const token = window.localStorage.getItem("authToken");
+
 
   // 2. si le token est encore valide
   if (token) {
@@ -59,5 +78,6 @@ export default {
   authenticate,
   logout,
   setup,
-  isAuthenticated
+  isAuthenticated,
+  nameUser
 };
