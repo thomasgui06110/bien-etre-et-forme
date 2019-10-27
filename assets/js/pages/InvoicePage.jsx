@@ -153,7 +153,7 @@ const InvoicePage = ({ history, match }) => {
         await InvoiceAPI.create(invoice);
         // TO DO NOTIFIACATION SUCCESS
         toast.success("La facture a été crée 😏");
-        history.replace("/invoices");
+        history.replace("/invoices/sum");
       }
     } catch ({ response }) {
       console.log(response);

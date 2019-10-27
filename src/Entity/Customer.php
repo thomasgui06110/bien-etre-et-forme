@@ -25,7 +25,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  *          "method"="GET",
  *          "access_control"="is_granted('ROLE_USER')",
  *          "access_control_message"="Vous n'avez pas le droit !"
- * }
+ *  },
+ *      "POST",
  * },
  *  normalizationContext={
  *      "groups"={"customers_read"}
