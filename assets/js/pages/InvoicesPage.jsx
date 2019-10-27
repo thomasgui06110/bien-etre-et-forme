@@ -85,7 +85,7 @@ const InvoicesPage = props => {
     c =>
       c.customer.firstName.toLowerCase().includes(search.toLowerCase()) ||
       c.customer.lastName.toLowerCase().includes(search.toLowerCase()) ||
-      c.year.toString().startsWith(search.toString()) ||
+      c.year.toString().startsWith(search.toString()) &&
       CERTIF_LABELS[c.medicalCertificate].toLowerCase() === search.toLowerCase()
     //c.amount.toLowerCase().startsWith(search.toLowerCase())
   );

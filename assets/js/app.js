@@ -94,7 +94,7 @@ const App = () => {
           </Switch>
         </main>
       </HashRouter>
-      <ToastContainer position={toast.POSITION.BOTTOM_LEFT} />
+      <ToastContainer position={toast.POSITION.BOTTOM_RIGHT} />
     </AuthContext.Provider>
   );
 };

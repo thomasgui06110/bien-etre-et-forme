@@ -10,26 +10,26 @@ import TableLoader from "../components/loaders/TableLoader";
 const InvoicePage = ({ history, match }) => {
   const { id = "new" } = match.params;
   const [invoice, setInvoice] = useState({
-    amount: "0",
-    subscription: "0",
+    amount: 0,
+   
     customer: "0",
     year: "",
-    subscription: "",
+    subscription: 0,
     medicalCertificate: "0",
     subscriptionType: "COMPLET",
     insurance: "NON",
-    january: "0",
-    february: "0",
-    march: "0",
-    april: "0",
-    may: "0",
+    january: 0,
+    february: 0,
+    march: 0,
+    april: 0,
+    may: 0,
     june: 0,
-    july: "0",
-    august: "0",
-    september: "0",
-    october: "0",
-    november: "0",
-    december: "0"
+    july: 0,
+    august: 0,
+    september: 0,
+    october: 0,
+    november: 0,
+    december: 0
   });
 
   const [customers, setCustomers] = useState([]);
@@ -187,14 +187,14 @@ const InvoicePage = ({ history, match }) => {
   let reste = total - regle;
   return (
     <>
-     <div className="d-flex justify-content-between align-items-center">
-      {(editing && <h1>Modification d une adhésion</h1>) || (
-        <h1>Création d'une adhésion</h1>
-      )}
+      <div className="d-flex justify-content-between align-items-center">
+        {(editing && <h1>Modification d une adhésion</h1>) || (
+          <h1>Création d'une adhésion</h1>
+        )}
 
-      <Link to="/customers/new" className="btn btn-primary">
-        Créer un adhérent
-      </Link>
+        <Link to="/customers/new" className="btn btn-primary">
+          Créer un adhérent
+        </Link>
       </div>
       {loading && <TableLoader />}
       {!loading && (
@@ -208,7 +208,7 @@ const InvoicePage = ({ history, match }) => {
           >
             {customers.map(customer => (
               <option key={customer.id} value={customer.id}>
-               {customer.lastName} {customer.firstName} 
+                {customer.lastName} {customer.firstName}
               </option>
             ))}
           </Select>
@@ -428,7 +428,12 @@ const InvoicePage = ({ history, match }) => {
           <div className="row mb-4">
             <div className="col-sm">
               <label>Total réglé </label>
-              <input className="form-control" type="number" value={regle} />
+              <input
+                className="form-control"
+                type="number"
+                value={regle}
+                readOnly
+              />
             </div>
             <div className="col-sm">
               <label>Total à régler </label>
@@ -437,11 +442,17 @@ const InvoicePage = ({ history, match }) => {
                 label="Total à régler"
                 type="number"
                 value={total}
+                readOnly
               />
             </div>
             <div className="col-sm">
               <label>Reste à régler </label>
-              <input className="form-control" type="number" value={reste} />
+              <input
+                className="form-control"
+                type="number"
+                value={reste}
+                readOnly
+              />
             </div>
           </div>
           <div className="form-group">
