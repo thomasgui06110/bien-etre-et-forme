@@ -28,7 +28,7 @@ const LoginPage = ({ onLogin, history }) => {
       setError("");
       onLogin(true);
       toast.success("Vous êtes connecté 😺")
-      history.replace("/invoices");
+      history.replace("/invoices/sum");
     } catch (error) {
       console.log(error.response);
       setError("Les identifiants sont incorects");
