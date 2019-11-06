@@ -24,8 +24,8 @@ class InvoiceRepository extends ServiceEntityRepository
         
         $query = $this->createQueryBuilder('i')
             ->select('i.year as Annee, SUM(i.amount) as Total, SUM(i.subscription) as Frais, COUNT(i.id) as NbAd, i.id ')
-            ->where('i.subscriptionType = :subscriptionType')
-            ->setParameter('subscriptionType', "COMPLET")
+            // ->where('i.subscriptionType = :subscriptionType')
+            // ->setParameter('subscriptionType', "COMPLET")
             ->groupBy('i.year')
             ->orderBy('i.year', 'DESC');
         return $query->getQuery()->getResult();
