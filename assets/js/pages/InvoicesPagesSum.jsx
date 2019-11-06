@@ -75,6 +75,7 @@ const InvoicesPagesSum = props => {
   };
 
   const handleDelete = async id => {
+    
     const originalInvoices = [...invoices];
     setInvoices(invoices.filter(invoice => invoice.iId !== id));
 
@@ -158,7 +159,7 @@ const InvoicesPagesSum = props => {
               <tr key={invoice.iId}>
                 <td>
                   <Link to={"/customers/" + invoice.id}>
-                    {invoice.firstName} {invoice.lastName}
+                    {invoice.firstName.charAt(0).toUpperCase() + invoice.firstName.substring(1).toLowerCase() } {invoice.lastName.toUpperCase()}
                   </Link>
                 </td>
                 <td>{invoice.phoneNumber}</td>
@@ -226,7 +227,7 @@ const InvoicesPagesSum = props => {
                     Modifier
                   </Link>
                   <button
-                    onClick={() => handleDelete(invoice.iId)}
+                    onClick={() => { if (window.confirm(' ✋ Etes vous sure de vouloir supprimer cette adhésion ? ✋')) handleDelete(invoice.iId)}}
                     className="btn btn-sm btn-danger"
                   >
                     Suppr

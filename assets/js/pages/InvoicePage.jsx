@@ -12,10 +12,10 @@ const InvoicePage = ({ history, match }) => {
   const [invoice, setInvoice] = useState({
     amount: 0,
    
-    customer: "0",
+    customer: 203,
     year: "",
     subscription: 0,
-    medicalCertificate: "0",
+    medicalCertificate: 0,
     subscriptionType: "COMPLET",
     insurance: "NON",
     january: 0,
@@ -148,11 +148,11 @@ const InvoicePage = ({ history, match }) => {
       if (editing) {
         await InvoiceAPI.update(id, invoice);
         // TODO NOTIFS SUCCESS
-        toast.success("La facture a été mise à jour 🙂");
+        toast.success("L'adhésion a été mise à jour 🙂");
       } else {
         await InvoiceAPI.create(invoice);
         // TO DO NOTIFIACATION SUCCESS
-        toast.success("La facture a été crée 😏");
+        toast.success("L'adhésion a été crée 😏");
         history.replace("/invoices/sum");
       }
     } catch ({ response }) {
@@ -208,7 +208,7 @@ const InvoicePage = ({ history, match }) => {
           >
             {customers.map(customer => (
               <option key={customer.id} value={customer.id}>
-                {customer.lastName} {customer.firstName}
+                {customer.lastName.toUpperCase()}  {customer.firstName.charAt(0).toUpperCase() + customer.firstName.substring(1).toLowerCase() }
               </option>
             ))}
           </Select>
@@ -257,8 +257,8 @@ const InvoicePage = ({ history, match }) => {
                 error={errors.medicalCertificate}
                 onChange={handelChange}
               >
-                <option value="1">OUI</option>
-                <option value="0">NON</option>
+                <option value="true">OUI</option>
+                <option value="false">NON</option>
               </Select>
             </div>
             <div className="col-sm">

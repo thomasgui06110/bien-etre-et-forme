@@ -201,7 +201,7 @@ class Customer
 
     public function setFirstName(?string $firstName): self
     {
-        $this->firstName = $firstName;
+        $this->firstName = ucfirst($firstName);
 
         return $this;
     }
@@ -213,7 +213,7 @@ class Customer
 
     public function setLastName(string $lastName): self
     {
-        $this->lastName = $lastName;
+        $this->lastName = strtoupper($lastName);
 
         return $this;
     }
@@ -328,7 +328,7 @@ class Customer
 
     public function setTown(?string $town): self
     {
-        $this->town = $town;
+        $this->town = strtoupper($town);
 
         return $this;
     }

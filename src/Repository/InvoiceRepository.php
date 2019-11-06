@@ -18,15 +18,19 @@ class InvoiceRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Invoice::class);
     }
-
-    public function NbAdherents()
+   
+    public function nbAdherents()
     {
+        
         $query = $this->createQueryBuilder('i')
-            ->select('i.year as Annee, SUM(i.amount) as Total, SUM(i.subscription) as Frais,COUNT(i.id) as NbAd, i.id ')
+            ->select('i.year as Annee, SUM(i.amount) as Total, SUM(i.subscription) as Frais, COUNT(i.id) as NbAd, i.id ')
+            ->where('i.subscriptionType = :subscriptionType')
+            ->setParameter('subscriptionType', "COMPLET")
             ->groupBy('i.year')
             ->orderBy('i.year', 'DESC');
         return $query->getQuery()->getResult();
     }
+
 
     // public function totalInvoiceByAdherent()
     // {
@@ -45,7 +49,10 @@ class InvoiceRepository extends ServiceEntityRepository
             i.amount, i.subscription, (i.amount + i.subscription) as Doit, i.insurance, c.id,
             (i.january + i.february + i.march + i.april + i.may + i.june + i.july + i.august + i.september + i.october + i.november + i.december) as Regle')
             ->join('i.customer', 'c')
-            ->orderBy('Annee', 'DESC');
+            //->orderBy('Annee', 'ASC') 
+            ->add('orderBy','Annee DESC, c.lastName ASC')
+            ;
+            
         return $query->getQuery()->getResult();
     }
 

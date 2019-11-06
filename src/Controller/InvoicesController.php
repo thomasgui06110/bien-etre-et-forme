@@ -11,7 +11,7 @@ class InvoicesController extends AbstractController
     /**
      * @Route(
      *  path="api/stats",
-     *  name="factures_par_annee",
+     *  name="nbAdherents",
      *  methods={"GET"},
      *  defaults={
      *      "_controller"="\app\controller\InvoicesController::nbAdherentsAnnee",
@@ -20,14 +20,9 @@ class InvoicesController extends AbstractController
      * }
      * )
      */
-    // private $totalInvoice;
-    // public function __construct()
-    // {
-    //     $this->totalInvoice = new ArrayCollection();
-    // }
     public function nbAdherentsAnnee(InvoiceRepository $repo)
     {
-        $nbAdherents = $repo->NbAdherents();
+        $nbAdherents = $repo->nbAdherents();
         return $this->json($nbAdherents);
     }
 

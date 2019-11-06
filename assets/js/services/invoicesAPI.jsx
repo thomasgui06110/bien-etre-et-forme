@@ -3,7 +3,7 @@ import { INVOICES_API } from "../config";
 
 function findAll() {
   return axios
-    .get(INVOICES_API + "?order[year]=desc&order[customer.lastName]=asc")
+    .get(INVOICES_API + "?order[customer.lastName]=ASC")
     .then(response => response.data["hydra:member"]);
 }
 
@@ -16,8 +16,8 @@ function findAllSum() {
 function findAllStats() {
   return axios
     //.get(API_URL + "stats")
-    //.get("http://localhost:8000/api/stats")
-    .get("https://bienetreforme.herokuapp.com/api/stats")
+    .get("http://localhost:8000/api/stats")
+    //.get("https://bienetreforme.herokuapp.com/api/stats")
     .then(response => response.data);
 }
 

@@ -67,7 +67,7 @@ const CustomersPage = props => {
 
   //
   const handleDelete = async id => {
-    console.log(id);
+    
 
     const originalCustomers = [...customers];
 
@@ -93,11 +93,14 @@ const CustomersPage = props => {
   };
 
   const itemsPerPage = 30;
+  
   const filteredCustomers = customers.filter(
     c =>
       c.firstName.toLowerCase().includes(search.toLowerCase()) ||
       c.lastName.toLowerCase().includes(search.toLowerCase()) ||
       c.town.toLowerCase().includes(search.toLowerCase())
+     
+     
   );
 
   // d'ou on part pendant combien
@@ -168,7 +171,7 @@ const CustomersPage = props => {
                 <td>{customer.id}</td>
                 <td>
                   <Link to={"/customers/" + customer.id}>
-                    {customer.firstName} {customer.lastName}
+                     {customer.firstName.charAt(0).toUpperCase() + customer.firstName.substring(1).toLowerCase() } {customer.lastName.toUpperCase()}
                   </Link>
                 </td>
                 <td>{customer.email}</td>
@@ -176,7 +179,7 @@ const CustomersPage = props => {
                 <td className="text-center">{customer.adress}</td>
 
                 <td className="text-center">
-                  {customer.postalCode} {customer.town}
+                  {customer.postalCode} {customer.town.toUpperCase()}
                 </td>
                 <td className="text-center">
                   <span className="btn btn-sm btn-outline-light"></span>

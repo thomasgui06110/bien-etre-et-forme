@@ -93,7 +93,7 @@ const Navbar = ({ history }) => {
                 </button>
               </li>
               <li className="Nav-item">
-                <span className="nav-link ">Bonjour {name} 🍹</span>
+                <span className="navbar-brand ml-2"> Bonjour {name} 🍹</span>
               </li>
             </>
           )}

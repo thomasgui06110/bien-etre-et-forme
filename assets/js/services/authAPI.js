@@ -29,14 +29,14 @@ function nameUser() {
     
     if (expiration * 1000 > new Date().getTime()) {
      const {firstName: Names} = jwtDecode(token);
-     console.log(Names)
+     
     } else {
       console.log("HELLO TROP TARD ");
       
     }
   }
 }
-console.log(Names)
+
 function setAxiosToken(token) {
   axios.defaults.headers["Authorization"] = "Bearer " + token;
 }

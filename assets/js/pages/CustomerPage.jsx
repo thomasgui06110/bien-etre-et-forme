@@ -89,7 +89,7 @@ const CustomerPage = ({ match, history }) => {
         await CustomersAPI.create(customer);
         // TODO : Flash notification
         toast.success("L'adhérent a bien été créé 🙂");
-        history.replace("/customers");
+       // history.replace("/customers");
       }
       setErrors({});
     } catch ({ response }) {
@@ -116,7 +116,7 @@ const CustomerPage = ({ match, history }) => {
               name="lastName"
               label="Nom de famille"
               placeholder=" Nom de famille de l'adhérent"
-              value={customer.lastName}
+              value={customer.lastName.toUpperCase()}
               onChange={handelChange}
               error={errors.lastName}
             />
@@ -183,7 +183,7 @@ const CustomerPage = ({ match, history }) => {
               name="town"
               label="Ville"
               placeholder=" Ville de l'adhérent"
-              value={customer.town}
+              value={customer.town.toUpperCase()}
               onChange={handelChange}
               error={errors.town}
             />

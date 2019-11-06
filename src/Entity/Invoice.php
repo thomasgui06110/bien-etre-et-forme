@@ -30,10 +30,12 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  *          "access_control"="is_granted('ROLE_ADMIN')",
  *          "access_control_message"="Vous n'avez pas le droit !"
  *  },
- *       "NbAdherents"={
+ *       "nbAdherents"={
  *          "method"="GET",
- *          "route_name"="NbAdherents",
- *          "controller"="InvoicesController::class"
+ *          "route_name"="nbAdherents",
+ *          "controller"="InvoicesController::class",
+ *          "access_control"="is_granted('ROLE_ADMIN')",
+ *          "access_control_message"="Vous n'avez pas le droit !"
  *  }
  * },
  *  
@@ -276,7 +278,12 @@ class Invoice
 
     public function setJanuary(?float $january): self
     {
-        $this->january = $january;
+        if ($january == null) {
+            $january === 10;
+        } else {
+
+            $this->january = 22;
+        }
 
         return $this;
     }
