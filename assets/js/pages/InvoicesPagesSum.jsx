@@ -11,13 +11,13 @@ const TYPE_CLASSES = {
   COMPLET: "light"
 };
 const CERTIF_CLASSES = {
-  true: "light",
-  false: "danger"
+  OUI: "light",
+  NON: "danger"
 };
 
 const CERTIF_LABELS = {
-  true: "Oui",
-  false: "Non"
+  OUI: "Oui",
+  NON: "Non"
 };
 
 const INVOICE_CLASSE = {
@@ -87,7 +87,7 @@ const InvoicesPagesSum = props => {
       setInvoices(originalInvoices);
     }
   };
-  const itemsPerPage = 30;
+  const itemsPerPage = 40;
 
   // Gestion de la recherche
   const filteredInvoices = invoices.filter(
@@ -95,8 +95,7 @@ const InvoicesPagesSum = props => {
       c.firstName.toLowerCase().includes(search.toLowerCase()) ||
       c.lastName.toLowerCase().includes(search.toLowerCase()) ||
       c.Annee.toString() === search.toString() ||
-      CERTIF_LABELS[c.medicalCertificate].toLowerCase() ===
-        search.toLowerCase() ||
+     // c.medical.toLowerCase() === search.toLowerCase() ||
       c.insurance.toUpperCase() === search.toUpperCase()
     //c.amount.toLowerCase().startsWith(search.toLowerCase())
   );
@@ -195,10 +194,10 @@ const InvoicesPagesSum = props => {
                   <span
                     className={
                       "badge badge-" +
-                      CERTIF_CLASSES[invoice.medicalCertificate]
+                      CERTIF_CLASSES[invoice.medical]
                     }
                   >
-                    {CERTIF_LABELS[invoice.medicalCertificate]}
+                    {invoice.medical}
                   </span>
                 </td>
                 <td className="text-center">

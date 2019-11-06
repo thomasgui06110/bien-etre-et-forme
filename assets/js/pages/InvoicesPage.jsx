@@ -16,8 +16,8 @@ const CERTIF_CLASSES = {
 };
 
 const CERTIF_LABELS = {
-  true: "Oui",
-  false: "Non"
+  "OUI": "Oui",
+  "NON": "Non"
 };
 
 const InvoicesPage = props => {

@@ -15,7 +15,7 @@ const InvoicePage = ({ history, match }) => {
     customer: 203,
     year: "",
     subscription: 0,
-    medicalCertificate: 0,
+    medicalCertificate:"OUI",
     subscriptionType: "COMPLET",
     insurance: "NON",
     january: 0,
@@ -72,7 +72,7 @@ const InvoicePage = ({ history, match }) => {
   };
   const CERTIF_LABELS = {
     true: "Oui",
-    false: "Non"
+    0: "Non"
   };
   useEffect(() => {
     fetchCustomers();
@@ -87,6 +87,7 @@ const InvoicePage = ({ history, match }) => {
         customer,
         subscription,
         medicalCertificate,
+        medical,
         subscriptionType,
         insurance,
         january,
@@ -109,6 +110,7 @@ const InvoicePage = ({ history, match }) => {
         customer: customer.id,
         subscription,
         medicalCertificate,
+        medical,
         subscriptionType,
         insurance,
         january,
@@ -248,20 +250,22 @@ const InvoicePage = ({ history, match }) => {
               />
             </div>
           </div>
+         
           <div className="row">
             <div className="col-sm">
               <Select
-                name="medicalCertificate"
+                name="medical"
                 label="Certificat médical"
-                value={invoice.medicalCertificate}
-                error={errors.medicalCertificate}
+                value={invoice.medical}
+                error={errors.medical}
                 onChange={handelChange}
               >
-                <option value="true">OUI</option>
-                <option value="false">NON</option>
+                <option value="OUI">OUI</option>
+                <option value="NON">NON</option>
               </Select>
             </div>
             <div className="col-sm">
+            
               <Select
                 name="subscriptionType"
                 label="Type d'adhésion"

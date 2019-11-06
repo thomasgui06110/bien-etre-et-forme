@@ -81,14 +81,14 @@ class Invoice
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})})
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})
      * @Assert\Type(type="numeric", message="Le montant doit être un chiffre ")
      */
     private $subscription;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
-     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})})
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})
      */
     private $medicalCertificate;
 
@@ -100,62 +100,62 @@ class Invoice
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})})
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})
      * @Assert\Type(type="numeric", message="Le montant doit être un chiffre ")
      */
     private $january;
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})})
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})
      */
     private $february;
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})})
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})
      */
     private $march;
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})})
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})
      */
     private $april;
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})})
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})
      */
     private $may;
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})})
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})
      */
     private $july;
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})})
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})
      */
     private $june;
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})})
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})
      */
     private $august;
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})})
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})
      */
     private $september;
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})})
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})
      */
     private $october;
 
@@ -184,6 +184,12 @@ class Invoice
      * @Groups({"invoices_read", "customers_read", "invoices_subresource"})})
      */
     private $insurance;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})
+     */
+    private $medical;
 
     public function __construct()
     {
@@ -440,6 +446,18 @@ class Invoice
     public function setInsurance(?string $insurance): self
     {
         $this->insurance = $insurance;
+
+        return $this;
+    }
+
+    public function getMedical(): ?string
+    {
+        return $this->medical;
+    }
+
+    public function setMedical(?string $medical): self
+    {
+        $this->medical = $medical;
 
         return $this;
     }
