@@ -16,8 +16,8 @@ function findAllSum() {
 function findAllStats() {
   return axios
     //.get(API_URL + "stats")
-    .get("http://localhost:8000/api/stats")
-    //.get("https://bienetreforme.herokuapp.com/api/stats")
+    //.get("http://localhost:8000/api/stats")
+    .get("https://bienetreforme.herokuapp.com/api/stats")
     .then(response => response.data);
 }
 
