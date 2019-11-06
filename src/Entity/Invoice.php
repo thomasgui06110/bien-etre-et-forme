@@ -284,13 +284,7 @@ class Invoice
 
     public function setJanuary(?float $january): self
     {
-        if ($january == null) {
-            $january === 10;
-        } else {
-
-            $this->january = 22;
-        }
-
+        $this->january = $january;
         return $this;
     }
 

@@ -12,10 +12,10 @@ const InvoicePage = ({ history, match }) => {
   const [invoice, setInvoice] = useState({
     amount: 0,
    
-    customer: 203,
+    customer: 204,
     year: "",
     subscription: 0,
-    medicalCertificate:"OUI",
+    medicalCertificate:"NON",
     subscriptionType: "COMPLET",
     insurance: "NON",
     january: 0,
